@@ -1,0 +1,12 @@
+{
+  "name": "MMM-Marvel",
+  "version": "1.0.0",
+  "description": "MagicMirror module to display comic character and book information.",
+  "main": "MMM-Marvel.js",
+  "author": "Buzz Kc",
+  "license": "MIT",
+  "dependencies": {
+    "marvel": "1.1.2"
+  },
+  "devDependencies": {}
+}
