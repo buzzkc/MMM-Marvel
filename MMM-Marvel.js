@@ -138,5 +138,10 @@ Module.register("MMM-Marvel", {
 			this.dataNotification = payload;
 			this.updateDom();
 		}
+		//messages to display in console from node_helper and other backend processes.
+		if (notification === "MMM-Marvel_Console_Output") {
+			console.log("OUTPUT_LOG:");
+			console.log(payload);
+		}
 	},
 });

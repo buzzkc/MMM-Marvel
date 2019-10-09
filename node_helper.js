@@ -14,14 +14,20 @@ var characters;
 module.exports = NodeHelper.create({
 
 	socketNotificationReceived: function(notification, payload) {
+		var self = this;
 		if (notification === 'MMM-Marvel_SEND_CONFIG') {
-			config = payload;
-			marvel = new Marvel({publicKey: this.publicKey, privateKey: this.privateKey});
-			characters = this.config.characters;
+			this.config = payload;
+			this.marvel = new Marvel({publicKey: this.config.publicKey, privateKey: this.config.privateKey});
+			this.characters = this.config.characters;
 		}
 
 		if (notification === "MMM-Marvel_GET_DATA") {
-
+			this.marvel.characters
+				.name(this.characters[0])
+				.get(function(err, resp) {
+					if (err) { self.sendSocketNotification('MMM-Marvel_Console_Output', err)}
+					else { self.sendSocketNotification('MMM-Marvel_Console_Output', resp) }
+				})
 		}
 	},
 
