@@ -41,7 +41,7 @@ var config = {
                     'Spider-Man',
                     'Thor'
                 ],
-                updateInterval: 30000
+                updateInterval: 30000 //Marvel allows 3,000 requests a day per key.
             }
         }
     ]
