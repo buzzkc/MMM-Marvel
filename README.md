@@ -37,7 +37,7 @@ var config = {
                 privateKey: 'yourPrivateKeyHere',
                 characters: [
                     'Hulk',
-                    'Batman',
+                    'Spider-Man',
                     'Thor'
                 ],
                 updateInterval: 30000

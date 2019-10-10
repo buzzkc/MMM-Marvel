@@ -8,3 +8,24 @@
  * Custom here your css module
  *
  */
+
+ .module .MMM-Marvel {
+	width: 400px;
+ }
+ 
+ .marvelThumbnail{
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+ }
+ 
+ .marvelCharacterName {
+	text-align: center;
+ }
+ 
+ .marvelDescription {
+	font-size: .75em;
+    line-height: 1em;
+	width: 380px;
+	text-align: center;
+ }

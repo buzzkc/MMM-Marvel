@@ -17,22 +17,22 @@ Module.register("MMM-Marvel", {
 	},
 
 	requiresVersion: "2.1.0", // Required version of MagicMirror
+	
+	currentCharacter: 0,
 
 	start: function() {
 		var self = this;
 		var dataRequest = null;
-		var dataNotification = null;
+		var data = null;
 
 		//Flag for check if module is loaded
 		this.loaded = false;
 
 		this.sendConfig();
+		//this.getData();
 
 		// Schedule update timer.
-		this.getData();
-		setInterval(function() {
-			self.updateDom();
-		}, this.config.updateInterval);
+		this.scheduleUpdate(2000);
 	},
 
 	sendConfig: function() {
@@ -46,7 +46,16 @@ Module.register("MMM-Marvel", {
 	 *
 	 */
 	getData: function() {
-		this.sendSocketNotification("MMM-Marvel_GET_DATA", null);
+		//iterate through character list each time
+		var hero = this.config.characters[this.currentCharacter];
+
+		this.currentCharacter = this.currentCharacter + 1 ;
+		if (this.currentCharacter === this.config.characters.length) {
+			//reached length of characters, reset to first
+			this.currentCharacter = 0;
+		}
+		
+		this.sendSocketNotification("MMM-Marvel_GET_DATA", hero);
 	},
 
 
@@ -66,6 +75,7 @@ Module.register("MMM-Marvel", {
 		var self = this;
 		setTimeout(function() {
 			self.getData();
+			self.scheduleUpdate();
 		}, nextLoad);
 	},
 
@@ -75,29 +85,28 @@ Module.register("MMM-Marvel", {
 		// create element wrapper for show into the module
 		var wrapper = document.createElement("div");
 		// If this.dataRequest is not empty
-		if (this.dataRequest) {
+		if (this.data && this.data.length > 0) {
+			
+			//image of character
+			var imgDataRequest = document.createElement("IMG");
+			imgDataRequest.src = this.data[0].thumbnail.path + '/portrait_incredible.' + this.data[0].thumbnail.extension;
+			imgDataRequest.className = 'marvelThumbnail'
+			//name of character
 			var wrapperDataRequest = document.createElement("div");
-			// check format https://jsonplaceholder.typicode.com/posts/1
-			wrapperDataRequest.innerHTML = this.dataRequest.title;
+			wrapperDataRequest.innerHTML = this.data[0].name;
+			wrapperDataRequest.className = 'marvelCharacterName';
 
-			var labelDataRequest = document.createElement("label");
-			// Use translate function
-			//             this id defined in translations files
-			labelDataRequest.innerHTML = this.translate("TITLE");
+			//description of character
+			var descriptionDataRequest = document.createElement("div");
+			descriptionDataRequest.innerHTML = this.data[0].description
+			descriptionDataRequest.className = 'marvelDescription'
 
-
-			wrapper.appendChild(labelDataRequest);
+			
+			wrapper.appendChild(imgDataRequest);
 			wrapper.appendChild(wrapperDataRequest);
+			wrapper.appendChild(descriptionDataRequest);
 		}
 
-		// Data from helper
-		if (this.dataNotification) {
-			var wrapperDataNotification = document.createElement("div");
-			// translations  + datanotification
-			wrapperDataNotification.innerHTML =  this.translate("UPDATE") + ": " + this.dataNotification.date;
-
-			wrapper.appendChild(wrapperDataNotification);
-		}
 		return wrapper;
 	},
 
@@ -133,9 +142,11 @@ Module.register("MMM-Marvel", {
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if(notification === "MMM-Marvel-NOTIFICATION_TEST") {
+		if(notification === "MMM-Marvel_Data_Received") {
 			// set dataNotification
-			this.dataNotification = payload;
+			this.data = payload;
+			console.log("data:");
+			console.log(this.data);
 			this.updateDom();
 		}
 		//messages to display in console from node_helper and other backend processes.

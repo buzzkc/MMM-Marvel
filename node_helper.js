@@ -18,15 +18,18 @@ module.exports = NodeHelper.create({
 		if (notification === 'MMM-Marvel_SEND_CONFIG') {
 			this.config = payload;
 			this.marvel = new Marvel({publicKey: this.config.publicKey, privateKey: this.config.privateKey});
-			this.characters = this.config.characters;
 		}
 
 		if (notification === "MMM-Marvel_GET_DATA") {
+			self.sendSocketNotification('MMM-Marvel_Console_Output', payload);
 			this.marvel.characters
-				.name(this.characters[0])
+				.name(payload)
 				.get(function(err, resp) {
 					if (err) { self.sendSocketNotification('MMM-Marvel_Console_Output', err)}
-					else { self.sendSocketNotification('MMM-Marvel_Console_Output', resp) }
+					else { 
+						self.sendSocketNotification('MMM-Marvel_Console_Output', resp);
+						self.sendSocketNotification('MMM-Marvel_Data_Received', resp);
+					}
 				})
 		}
 	},
