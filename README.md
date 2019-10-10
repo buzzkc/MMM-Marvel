@@ -5,6 +5,7 @@ This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror
 This module displays comic character and book information.
 
 Register for your free keys at [Marvel's](https://developer.marvel.com/) developer website. 
+
 ![](./images/MMM-Marvel.png)
 
 ## Dependencies
