@@ -1,4 +1,4 @@
-# [WIP] MMM-Marvel
+# MMM-Marvel
 
 This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror/).
 
@@ -59,7 +59,7 @@ var config = {
 
 
 ## Future Enhancements
-* This is a work in progress
+* List of characters
 
 
 ## Thanks To
